@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -15,9 +16,10 @@ type TensorService struct {
 }
 
 func NewTensorService() *TensorService {
+	apiKey := os.Getenv("TENSOR_BOT_APIKEY") // "e3a7eaf1-abc4-4fb7-addd-5755a6bb197d"
 	return &TensorService{
 		httpClient:   &http.Client{Timeout: 15 * time.Second},
-		apiKey:       "e3a7eaf1-abc4-4fb7-addd-5755a6bb197d",
+		apiKey:       apiKey,
 		tensorApiUrl: "https://api.tensor.so/graphql",
 	}
 }

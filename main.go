@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"tensor/pkg/bot"
 	"tensor/pkg/tensor"
 	"time"
@@ -19,22 +20,26 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	privateKey, err := solana.PrivateKeyFromSolanaKeygenFile("/Users/alexwormuth/.config/solana/id.json")
+
+	keypath := os.Getenv("TENSOR_BOT_KEYPATH")
+	privateKey, err := solana.PrivateKeyFromSolanaKeygenFile(keypath)
 	if err != nil {
 		panic(err)
 	}
 
-	owner := "2tP2YSMKCFBVEFk6bZzsjDwn3LmgYJvFuLxyXWV4eHPi" // trading wallet
+	owner := os.Getenv("TENSOR_BOT_PUBKEY")
+	// owner := "2tP2YSMKCFBVEFk6bZzsjDwn3LmgYJvFuLxyXWV4eHPi" // trading wallet
 
 	// Init Tensor
 	tensorService := tensor.NewTensorService()
 
 	bots := []*bot.Bot{
+		bot.NewBot(tensorService, solanaClient, wsClient, privateKey, "fe16c678-aaa9-4d4c-b082-bbc33110f88e", owner),
 		// bot.NewBot(tensorService, solanaClient, wsClient, privateKey, "dcf741e2-9c58-45a4-b9cd-3b540b0ddb15", owner), // cheap collection
 
 		// bot.NewBot(tensorService, solanaClient, wsClient, privateKey, "bccd337d-0d8d-4a1a-9703-2ff922253a86", owner),
 
-		bot.NewBot(tensorService, solanaClient, wsClient, privateKey, "00d69fef-4c5f-4b71-bd34-24222696c80e", owner),
+		// bot.NewBot(tensorService, solanaClient, wsClient, privateKey, "00d69fef-4c5f-4b71-bd34-24222696c80e", owner),
 
 		// bot.NewBot(tensorService, solanaClient, wsClient, privateKey, "e60dd60b-ac57-4bbe-baa1-20a13f94f294", owner),
 
